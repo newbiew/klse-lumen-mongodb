@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
-use App\Models\Html;
+use App\Models\AnnouncementPage;
 use App\Models\Quarterly_report;
 
 
@@ -44,7 +44,7 @@ class GeneratePage extends Command
     {
         // $annId = 3306470; // none qr
 
-        $annId = Html::max("ann_id");
+        $annId = AnnouncementPage::max("ann_id");
 
         if (!$annId) {
             $annId = 3307646;
@@ -52,7 +52,7 @@ class GeneratePage extends Command
             $annId++;
         }
 
-        $checkExist = Html::where("ann_id", $annId)->first();
+        $checkExist = AnnouncementPage::where("ann_id", $annId)->first();
         $domDoc = new \DOMDocument();
         if (!$checkExist) {
             $response = Http::get("https://disclosure.bursamalaysia.com/FileAccess/viewHtml?e=" . $annId . "#https://www.bursamalaysia.com/market_information/announcements/company_announcement/announcement_details?ann_id=" . $annId);
@@ -92,7 +92,7 @@ class GeneratePage extends Command
     {
 
         // save to database
-        $html = new Html;
+        $html = new AnnouncementPage;
         $html->ann_id = $annId;
         $html->content = $domDoc->saveHTML();
         $html->save();
