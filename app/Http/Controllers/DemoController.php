@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
 
-use App\Models\Html;
+use App\Models\AnnouncementPage;
 use App\Models\Quarterly_report;
 
 use Request;
@@ -204,7 +204,7 @@ class DemoController extends Controller
 
         // $annId = 3306470; // none qr
         $annId =  3307746; // QR annId
-        $checkExist = Html::where("ann_id", $annId)->first();
+        $checkExist = AnnouncementPage::where("ann_id", $annId)->first();
 
 
         //  strpos($checkExist->content, 'not found');
@@ -281,7 +281,7 @@ class DemoController extends Controller
 
     public function get($id) // get and return html page
     {
-        $html = Html::find($id);
+        $html = AnnouncementPage::find($id);
         $domDoc = new \DOMDocument();
         @$domDoc->loadHTML($html->content);
         $domDoc->preserveWhiteSpace = true;
@@ -292,7 +292,7 @@ class DemoController extends Controller
     {
 
         // save to database
-        $html = new Html;
+        $html = new AnnouncementPage;
         $html->ann_id = $annId;
         $html->content = $domDoc->saveHTML();
         $html->save();
